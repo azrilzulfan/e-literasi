@@ -7,12 +7,6 @@
 
         <title>{{ config('app.name', 'E-Literasi') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
             * {
                 font-family: Arial, sans-serif;
@@ -109,6 +103,7 @@
                     <thead>
                         <tr>
                             <th>Judul</th>
+                            <th>Deskripsi</th>
                             <th>Penulis</th>
                             <th>Penerbit</th>
                             <th>Tahun Terbit</th>
@@ -119,6 +114,7 @@
                         @foreach ($buku as $item)
                         <tr>
                             <td>{{ $item->judul }}</td>
+                            <td>{{ $item->deskripsi }}</td>
                             <td>{{ $item->penulis }}</td>
                             <td>{{ $item->penerbit }}</td>
                             <td>{{ $item->tahun_terbit }}</td>

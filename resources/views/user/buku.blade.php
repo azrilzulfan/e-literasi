@@ -20,7 +20,7 @@
                 {{ $buku->penulis }}
             </div>
             <div class="my-5">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Provident, dolorem asperiores deleniti ullam eum sint mollitia non sequi, pariatur laboriosam ipsa illo voluptates cum, quidem ea. Sequi sit quisquam aliquid.
+                {{ $buku->deskripsi }}
             </div>
             <div class="text-sm flex gap-5">
                 <div>
@@ -50,7 +50,6 @@
                 @endif
             </div>
             <div class="mt-10">
-                <div class="text-2xl font-bold mb-5">Ulasan</div>
                 <div class="flex gap-20 mb-10">
                     <div>
                         <div class="mb-2 font-semibold">Total</div>
@@ -97,72 +96,134 @@
                 <img class="w-[400px] h-[550px] rounded-lg shadow" src="{{ asset($buku->foto) }}" alt="">
             </div>
             @if ($ulasan->count() > 0)
-                <div id="slider-ulasan" class="relative w-full shadow mt-5" data-carousel="static">
-                    <div class="relative h-56 overflow-hidden rounded-lg">
-                        @foreach ($ulasan as $index => $item)
-                            <div class="hidden duration-700 ease-in-out py-5 px-8" data-carousel-item>
-                                <div class="container w-full p-4">
-                                    <div class="flex justify-between">
-                                        <div class="text-xl font-medium mb-5">
-                                            <div>{{ $item->users->name }}</div>
-                                            <div class="text-sm text-gray-400 flex gap-2 items-center">
-                                                {{ $item->users->email }}
-                                                @if (Auth::check() && Auth::user()->id === $item->users->id)
-                                                    <div>
-                                                        <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="opsiUlasan{{ $index }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-50 rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">
-                                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
-                                                                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
-                                                            </svg>
-                                                        </button>
-                                                        <div id="opsiUlasan{{ $index }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-xl w-44">
-                                                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconHorizontalButton">
-                                                                <li>
-                                                                    <form action="{{ route('buku.ulasanDestroy', $item->id) }}" method="POST">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Hapus</button>
-                                                                    </form>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="text-xl font-bold flex gap-2 items-center">
-                                            {{ $item->rating }}
-                                            <input type="radio" disabled class="mask mask-star-2 bg-yellow-300" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="mt-2">
-                                            <p class="border rounded-lg p-4">{{ $item->ulasan }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
-                            <svg class="w-4 h-4 text-secondary rtl:rotate-180 mr-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                            </svg>
-                            <span class="sr-only">Previous</span>
-                        </span>
-                    </button>
-                    <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
-                            <svg class="w-4 h-4 text-secondary rtl:rotate-180 ml-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                            </svg>
-                            <span class="sr-only">Next</span>
-                        </span>
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl font-bold mt-7 mb-2">Ulasan Terbaru</h1>
+                    <button data-modal-target="modalUlasan" data-modal-toggle="modalUlasan" type="button" class="mt-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
                     </button>
                 </div>
-                <div class="mt-2">
-                    {{ $ulasan->links() }}
+                <div class="container w-full p-4 shadow mb-2">
+                    <div class="flex justify-between">
+                        <div class="text-xl font-medium my-5">
+                            <div>{{ $ulasanTerbaru->users->name }}</div>
+                            <div class="text-sm text-gray-400 flex gap-2 items-center">
+                                {{ $ulasanTerbaru->users->email }}
+                                @if (Auth::check() && Auth::user()->id === $ulasanTerbaru->users->id)
+                                    <div>
+                                        <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="opsiUlasanTerbaru{{ $ulasanTerbaru->id }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-50 rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                                                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+                                            </svg>
+                                        </button>
+                                        <div id="opsiUlasanTerbaru{{ $ulasanTerbaru->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-xl w-44">
+                                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconHorizontalButton">
+                                                <li>
+                                                    <button data-modal-target="modalHapus" data-modal-toggle="modalHapus" type="button" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Hapus</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="text-xl font-bold flex gap-2 items-center">
+                            {{ $ulasanTerbaru->rating }}
+                            <input type="radio" disabled class="mask mask-star-2 bg-yellow-300" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mt-2">
+                            <p class="border rounded-lg p-4">{{ $ulasanTerbaru->ulasan }}</p>
+                        </div>
+                    </div>
+                    <!-- Modal Ulasan -->
+                    <div id="modalUlasan" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-md max-h-full">
+                            <!-- Modal content -->
+                            <div class="relative px-10 bg-white rounded-lg shadow">
+                                <!-- Modal header -->
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                                    <h3 class="text-lg font-semibold text-gray-900">
+                                        Ulasan - {{ $buku->judul }}
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="modalUlasan">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="container w-full p-4 shadow mb-2">
+                                    @foreach ($ulasan as $index => $item)
+                                        <div class="flex justify-between">
+                                            <div class="text-xl font-medium my-5">
+                                                <div>{{ $item->users->name }}</div>
+                                                <div class="text-sm text-gray-400 flex gap-2 items-center">
+                                                    {{ $item->users->email }}
+                                                    @if (Auth::check() && Auth::user()->id === $item->users->id)
+                                                        <div>
+                                                            <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="opsiUlasan{{ $index }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-50 rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">
+                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                                                                    <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+                                                                </svg>
+                                                            </button>
+                                                            <div id="opsiUlasan{{ $index }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-xl w-44">
+                                                                <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconHorizontalButton">
+                                                                    <li>
+                                                                        <button data-modal-target="modalHapus" data-modal-toggle="modalHapus" type="button" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Hapus</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="text-xl font-bold flex gap-2 items-center">
+                                                {{ $item->rating }}
+                                                <input type="radio" disabled class="mask mask-star-2 bg-yellow-300" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="mt-2">
+                                                <p class="border rounded-lg p-4">{{ $item->ulasan }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Hapus -->
+                    <div id="modalHapus" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-md max-h-full">
+                            <div class="relative bg-white rounded-lg shadow">
+                                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="modalHapus">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                    </svg>
+                                    <span class="sr-only">Close modal</span>
+                                </button>
+                                <div class="p-4 md:p-5 text-center">
+                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                    <h3 class="mb-5 text-lg font-normal text-gray-800">Apakah Anda yakin ingin menghapus ini?</h3>
+                                    <form action="{{ route('buku.ulasanDestroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                            Ya, saya yakin
+                                        </button>
+                                        <button data-modal-hide="modalHapus" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Tidak, batalkan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="flex items-center p-4 mb-4 text-sm text-red-500 rounded-lg bg-red-100 mt-5">
@@ -177,19 +238,3 @@
         </div>
     </div>
 </x-app-layout>
-
-<div id="toast-default" class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
-    <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
-        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.147 15.085a7.159 7.159 0 0 1-6.189 3.307A6.713 6.713 0 0 1 3.1 15.444c-2.679-4.513.287-8.737.888-9.548A4.373 4.373 0 0 0 5 1.608c1.287.953 6.445 3.218 5.537 10.5 1.5-1.122 2.706-3.01 2.853-6.14 1.433 1.049 3.993 5.395 1.757 9.117Z"/>
-        </svg>
-        <span class="sr-only">Fire icon</span>
-    </div>
-    <div class="ms-3 text-sm font-normal">Set yourself free.</div>
-    <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-default" aria-label="Close">
-        <span class="sr-only">Close</span>
-        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-        </svg>
-    </button>
-</div>

@@ -29,7 +29,7 @@ class KoleksiController extends Controller
             'buku_id' => $request->buku_id
         ]);
 
-        return redirect()->route('koleksi.index');
+        return redirect()->route('koleksi.index')->with(['success' => 'Koleksi berhasil ditambahkan']);
     }
 
     public function destroy($id)
@@ -37,6 +37,6 @@ class KoleksiController extends Controller
         $koleksi = Koleksi::findOrFail($id);
         $koleksi->delete();
 
-        return redirect()->route('koleksi.index');
+        return redirect()->route('koleksi.index')->with(['success' => 'Koleksi berhasil dihapus']);
     }
 }

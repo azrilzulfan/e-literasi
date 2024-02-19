@@ -37,10 +37,10 @@
     </div>
 
     <div class="mb-8">
-        <div class="grid grid-cols-7 gap-2" id="daftarBuku">
+        <div class="grid grid-cols-6 gap-2" id="daftarBuku">
             @foreach ($buku as $item)
             <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                <a href="{{ route('buku.show', $item->id) }}">
+                <a href="{{ route('buku.show', $item->slug) }}">
                     <img class="rounded-t-lg" src="{{ asset($item->foto) }}" alt="{{ $item->foto }}" />
                 </a>
                 <div class="p-5">

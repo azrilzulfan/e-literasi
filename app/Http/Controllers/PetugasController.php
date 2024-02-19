@@ -10,8 +10,9 @@ class PetugasController extends Controller
 {
     public function index()
     {
-        $petugas = User::where('role', 'petugas')->get();
-        return view('admin.petugas', compact('petugas'));
+        $petugas = User::where('role', 'petugas')->paginate(10);
+        $nomor = ($petugas->currentPage() - 1) * $petugas->perPage() + 1;
+        return view('admin.petugas', compact('petugas','nomor'));
     }
 
     public function store(Request $request)
@@ -33,7 +34,7 @@ class PetugasController extends Controller
             'role' => 'petugas',
         ]);
 
-        return redirect()->route('petugas.index');
+        return redirect()->route('petugas.index')->with(['success' => 'Petugas berhasil ditambahkan']);
     }
 
     public function update(Request $request, $id)
@@ -47,7 +48,7 @@ class PetugasController extends Controller
         $petugas = User::findOrFail($id);
         $petugas->update($request->all());
 
-        return redirect()->route('petugas.index');
+        return redirect()->route('petugas.index')->with(['success' => 'Petugas berhasil diubah']);
     }
 
     public function destroy($id)
@@ -55,6 +56,6 @@ class PetugasController extends Controller
         $petugas = User::findOrFail($id);
         $petugas->delete();
 
-        return redirect()->route('petugas.index');
+        return redirect()->route('petugas.index')->with(['success' => 'Petugas berhasil dihapus']);
     }
 }

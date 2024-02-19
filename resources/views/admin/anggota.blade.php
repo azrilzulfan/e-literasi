@@ -26,13 +26,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $no = 1;
-                                @endphp
                                 @foreach ($anggota as $item)
                                     <tr class="odd:bg-white even:bg-gray-50 border-b">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            {{ $no++ }}
+                                            {{ $nomor++ }}
                                         </th>
                                         <td class="px-6 py-4">
                                             {{ $item->name }}
@@ -50,6 +47,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-4">
+                            {{ $anggota->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

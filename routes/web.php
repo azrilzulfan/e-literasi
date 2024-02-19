@@ -9,6 +9,11 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PetugasController;
+use App\Models\Buku;
+use App\Models\Kategori;
+use App\Models\KategoriBukuRelasi;
+use App\Models\Peminjaman;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,12 +28,28 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [BerandaController::class, 'index'])->name('beranda');
-Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
+Route::get('/buku/{slug}', [BukuController::class, 'show'])->name('buku.show');
 Route::get('/buku', [BukuController::class, 'showRandom'])->name('buku.random');
 
 Route::middleware('auth')->group(function () {
     Route::middleware(['role:admin,petugas'])->group(function () {
-        Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('dashboard');
+        Route::get('/dashboard', function () {
+            $buku = Buku::count();
+            $kategori = Kategori::count();
+            $kategoriBukuRelasi = KategoriBukuRelasi::count();
+            $peminjaman = Peminjaman::count();
+            $petugas = User::where('role', 'petugas')->count();
+            $anggota = User::where('role', 'anggota')->count();
+
+            return view('admin.dashboard')->with([
+                'buku' => $buku,
+                'kategori' => $kategori,
+                'kategoriBukuRelasi' => $kategoriBukuRelasi,
+                'peminjaman' => $peminjaman,
+                'petugas' => $petugas,
+                'anggota' => $anggota
+            ]);
+        })->name('dashboard');
         // Data Buku
         Route::get('/dashboard/buku', [DataBukuController::class, 'index'])->name('dataBuku.index');
         Route::post('/dashboard/buku', [DataBukuController::class, 'store'])->name('dataBuku.store');

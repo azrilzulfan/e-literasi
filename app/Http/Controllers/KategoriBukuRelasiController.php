@@ -11,10 +11,11 @@ class KategoriBukuRelasiController extends Controller
 {
     public function index()
     {
-        $kategoriBuku = KategoriBukuRelasi::all();
+        $kategoriBuku = KategoriBukuRelasi::paginate(10);
         $buku = Buku::all();
         $kategori = Kategori::all();
-        return view('admin.kategoriBuku', compact('kategoriBuku','buku','kategori'));
+        $nomor = ($kategoriBuku->currentPage() - 1) * $kategoriBuku->perPage() + 1;
+        return view('admin.kategoriBuku', compact('kategoriBuku','buku','kategori','nomor'));
     }
 
     public function store(Request $request)
@@ -26,7 +27,7 @@ class KategoriBukuRelasiController extends Controller
 
         KategoriBukuRelasi::create($request->all());
 
-        return redirect()->route('kategoriBukuRelasi.index');
+        return redirect()->route('kategoriBukuRelasi.index')->with(['success' => 'Kategori Buku berhasil ditambahkan']);
     }
 
     public function update(Request $request, $id)
@@ -39,7 +40,7 @@ class KategoriBukuRelasiController extends Controller
         $kategoriBuku = KategoriBukuRelasi::findOrFail($id);
         $kategoriBuku->update($request->all());
 
-        return redirect()->route('kategoriBukuRelasi.index');
+        return redirect()->route('kategoriBukuRelasi.index')->with(['success' => 'Kategori Buku berhasil diubah']);
     }
 
     public function destroy($id)
@@ -47,6 +48,6 @@ class KategoriBukuRelasiController extends Controller
         $kategoriBuku = KategoriBukuRelasi::findOrFail($id);
         $kategoriBuku->delete();
 
-        return redirect()->route('kategoriBukuRelasi.index');
+        return redirect()->route('kategoriBukuRelasi.index')->with(['success' => 'Kategori Buku berhasil dihapus']);
     }
 }

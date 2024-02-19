@@ -12,8 +12,9 @@ class PeminjamanController extends Controller
 {
     public function index()
     {
-        $peminjaman = Peminjaman::all();
-        return view('admin.peminjaman', compact('peminjaman'));
+        $peminjaman = Peminjaman::paginate(10);
+        $nomor = ($peminjaman->currentPage() - 1) * $peminjaman->perPage() + 1;
+        return view('admin.peminjaman', compact('peminjaman','nomor'));
     }
 
     public function store(Request $request)
@@ -34,7 +35,7 @@ class PeminjamanController extends Controller
         $buku->stok = $buku->stok - 1;
         $buku->save();
 
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'Buku berhasil dipinjam']);
     }
 
     public function update($id)
@@ -47,7 +48,7 @@ class PeminjamanController extends Controller
         $buku->stok = $buku->stok + 1;
         $buku->save();
 
-        return redirect()->route('peminjaman.index');
+        return redirect()->route('peminjaman.index')->with(['success' => 'Buku berhasil dikembalikkan']);
     }
 
     public function destroy($id)
@@ -55,7 +56,7 @@ class PeminjamanController extends Controller
         $peminjaman = Peminjaman::findOrFail($id);
         $peminjaman->delete();
 
-        return redirect()->route('peminjaman.index');
+        return redirect()->route('peminjaman.index')->with(['success' => 'Peminjaman berhasil dihapus']);
     }
 
     public function peminjamanPDF()
