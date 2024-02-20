@@ -64,7 +64,7 @@
                                             <img src="{{ asset($item->foto) }}" width="100" alt="Img" class="rounded-lg" />
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $item->deskripsi }}
+                                            {{ Str::limit($item->deskripsi, 50) }}
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ $item->penulis }}
@@ -146,6 +146,10 @@
                                                             <div class="col-span-2">
                                                                 <label class="block mb-2 text-sm font-medium text-gray-900" for="foto">Foto</label>
                                                                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" aria-describedby="foto_help" id="foto" type="file" name="foto">
+                                                            </div>
+                                                            <div class="col-span-2">
+                                                                <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
+                                                                <textarea id="deskripsi" name="deskripsi" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">{{ $item->deskripsi }}</textarea>
                                                             </div>
                                                             <div class="col-span-2">
                                                                 <label for="penulis" class="block mb-2 text-sm font-medium text-gray-900">Penulis</label>

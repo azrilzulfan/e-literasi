@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
             $kategoriBukuRelasi = KategoriBukuRelasi::count();
             $peminjaman = Peminjaman::count();
             $petugas = User::where('role', 'petugas')->count();
-            $anggota = User::where('role', 'anggota')->count();
+            $anggota = User::where('role', 'user')->count();
 
             return view('admin.dashboard')->with([
                 'buku' => $buku,

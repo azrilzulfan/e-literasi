@@ -123,7 +123,7 @@
                             </tbody>
                         </table>
                         <div class="mt-4">
-                            {{ $petugas->links() }}
+                            {{ $peminjaman->links() }}
                         </div>
                     </div>
                 </div>
