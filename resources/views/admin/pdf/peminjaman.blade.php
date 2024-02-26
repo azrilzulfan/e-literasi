@@ -111,7 +111,9 @@
                             <th>Nama Peminjam</th>
                             <th>Judul Buku</th>
                             <th>Tanggal Peminjaman</th>
+                            <th>Batas Waktu Peminjaman</th>
                             <th>Tanggal Pengembalian</th>
+                            <th>Denda</th>
                             <th>Status Peminjaman</th>
                         </tr>
                     </thead>
@@ -121,7 +123,9 @@
                             <td>{{ $item->users->name }}</td>
                             <td>{{ $item->buku->judul }}</td>
                             <td>{{ $item->tgl_peminjaman }}</td>
+                            <td>{{ $item->batas_waktu }}</td>
                             <td>{{ $item->tgl_pengembalian }}</td>
+                            <td>Rp. {{ $item->denda }}</td>
                             <td>
                                 @if ($item->status_peminjaman == 'N')
                                     Dipinjam

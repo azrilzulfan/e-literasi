@@ -18,15 +18,15 @@
         </div>
     </div>
     <div class="mb-8">
-        <div class="grid grid-cols-7 gap-4">
+        <div class="grid grid-cols-6 gap-4">
             @foreach ($koleksi as $index => $item)
                 <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                    <a href="{{ route('buku.show', $item->buku->id) }}">
-                        <img class="rounded-t-lg" src="{{ $item->buku->foto }}" alt="" />
+                    <a href="{{ route('buku.show', $item->buku->slug) }}">
+                        <img class="rounded-t-lg" src="{{ $item->buku->foto }}" alt="" width="250"/>
                     </a>
                     <div class="p-5">
                         @foreach ($item->buku->kategoriBukuRelasi as $kategori)
-                        <a href="" class="px-3 py-2 text-xs font-medium text-center text-white bg-secondary rounded-lg">{{ $kategori->kategori->nama_kategori }}</a>
+                        <a href="" class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $kategori->kategori->nama_kategori }}</a>
                         @endforeach
                         <p class="mb-3 mt-3 text-sm font-semibold text-gray-500">{{ $item->buku->judul }}</p>
                         <div class="flex justify-between items-center">
@@ -40,14 +40,14 @@
                                 <div id="opsiKoleksi{{ $index }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-xl w-44">
                                     <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconHorizontalButton">
                                         <li>
-                                            <button data-modal-target="modalHapus" data-modal-toggle="modalHapus" type="button" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Hapus</button>
+                                            <button data-modal-target="modalHapus{{ $item->id }}" data-modal-toggle="modalHapus{{ $item->id }}" type="button" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Hapus</button>
                                         </li>
                                     </ul>
                                 </div>
-                                <div id="modalHapus" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div id="modalHapus{{ $item->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative p-4 w-full max-w-md max-h-full">
                                         <div class="relative bg-white rounded-lg shadow">
-                                            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="modalHapus">
+                                            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="modalHapus{{ $item->id }}">
                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                                 </svg>
@@ -78,6 +78,51 @@
         </div>
     </div>
 </x-app-layout>
+
+<div class="w-[25%] p-10 min-h-screen bg-secondary text-white fixed top-0 right-0">
+    <h1 class="text-xl font-semibold mb-10">Peminjaman Buku</h1>
+    @if ($peminjaman->count() > 0)
+        <div class="max-h-[800px] overflow-y-auto scrollable">
+            @foreach ($peminjaman as $index => $item)
+            <div class="mb-10 bg-gray-700 p-4 rounded-xl">
+                <h2 class="text-lg font-semibold">{{ $item->buku->judul }}</h2>
+                <div class="flex justify-between items-center">
+                    <h3 class="text-primary">{{ $item->buku->penulis }}</h3>
+                    @if ($item->status_peminjaman == 'N')
+                        <span class="text-white bg-red-500 rounded-lg py-1 px-2">Dipinjam</span>
+                    @else
+                        <span class="text-white bg-green-500 rounded-lg py-1 px-2">Dikembalikan</span>
+                    @endif
+                </div>
+                <hr class="mt-2 mb-4">
+                <div class="text-sm flex gap-5">
+                    <div>
+                        <p>Tanggal Peminjaman</p>
+                        <p>Batas Waktu</p>
+                        <p>Tanggal Pengembalian</p>
+                    </div>
+                    <div>
+                        <p>{{ $item->tgl_peminjaman }}</p>
+                        <p>{{ $item->batas_waktu }}</p>
+                        <p>{{ $item->tgl_pengembalian }}</p>
+                    </div>
+                </div>
+                <hr class="mt-2 mb-4">
+                <p class="text-end">Denda : Rp. {{ $item->denda }}</p>
+            </div>
+            @endforeach
+        </div>
+    @else
+        <div class="flex items-center p-4 mb-4 text-sm text-red-500 rounded-lg bg-red-100 mt-5">
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <div>
+                Belum ada peminjaman buku.
+            </div>
+        </div>
+    @endif
+</div>
 
 <!-- Modal Tambah -->
 <div id="modalTambah" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">

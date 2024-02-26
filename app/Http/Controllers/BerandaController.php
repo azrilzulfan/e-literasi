@@ -12,7 +12,9 @@ class BerandaController extends Controller
     public function index(Request $request)
     {
         $query = $request->input('query');
-        $buku = Buku::latest()->get();
+        $buku = Buku::all();
+        $bukuTerbaru = Buku::latest()->take(2)->get();
+        $randomBuku = Buku::inRandomOrder()->first();
         $kategori = Kategori::all();
         $averages = [];
 
@@ -35,6 +37,6 @@ class BerandaController extends Controller
                 ->get();
         }
 
-        return view('user.beranda', compact('buku', 'averages', 'kategori'));
+        return view('user.beranda', compact('buku', 'bukuTerbaru', 'randomBuku', 'averages', 'kategori'));
     }
 }

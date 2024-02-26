@@ -146,15 +146,13 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                             </svg>
                         </button>
-                        <ul id="dropdown-pengguna" class="hidden py-2 space-y-2">
-                            @if (Auth::user()->role == 'admin')
+                        <ul id="dropdown-pengguna" class="{{ request()->routeIs('petugas.index','anggota.index') ? '' : 'hidden' }} py-2 space-y-2">
                             <li class="relative">
                                 <a href="{{ route('petugas.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:text-primary">Petugas</a>
                                 @if(request()->routeIs('petugas.index'))
-                                <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-10 rounded-tr-lg rounded-br-lg bg-primary"></div>
+                                    <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-10 rounded-tr-lg rounded-br-lg bg-primary"></div>
                                 @endif
                             </li>
-                            @endif
                             <li class="relative">
                                 <a href="{{ route('anggota.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:text-primary">Anggota</a>
                                 @if(request()->routeIs('anggota.index'))

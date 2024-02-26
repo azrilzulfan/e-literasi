@@ -41,18 +41,22 @@
                     width: 0;
                 }
             }
+
+            .scrollable::-webkit-scrollbar {
+                display: none;
+            }
         </style>
     </head>
-    <body class="font-sans antialiased bg-white">
-        <div class="text-gray-900 bg-gray-50 min-h-screen">
-            <div class="bg-white shadow px-20 mb-6">
-                <div class="flex justify-between items-center">
-                    <a href="{{ route('beranda') }}">
-                        <img src="{{ asset('img/logo.png') }}" alt="" width="100" height="100">
-                    </a>
+    <body class="font-sans text-gray-900 antialiased bg-white min-h-screen">
+        <div class="flex pl-20">
+            <div class="w-[75%]">
+                <nav class="flex justify-between items-center pr-10">
                     <div class="flex space-x-10 items-center">
-                        <a href="{{ route('beranda') }}" class="hover:text-primary active:text-primary">Beranda</a>
-                        <a href="{{ route('koleksi.index') }}" class="hover:text-primary active:text-primary">Koleksi</a>
+                        <a href="{{ route('beranda') }}" class="mr-5">
+                            <img src="{{ asset('img/logo.png') }}" alt="" width="100" height="100">
+                        </a>
+                        <a href="{{ route('beranda') }}" class="hover:text-primary">Beranda</a>
+                        <a href="{{ route('koleksi.index') }}" class="hover:text-primary">Koleksi Peminjaman Buku</a>
                         <a href="{{ route('buku.random') }}" class="bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-white hover:border-transparent font-bold rounded-full text-sm px-5 py-2.5 text-center me-2 flex items-center gap-2">
                             <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
@@ -60,7 +64,8 @@
                             Pinjam Buku Baru
                         </a>
                     </div>
-                    @if (Route::has('login'))
+                    <div>
+                        @if (Route::has('login'))
                         @auth
                         <button type="button" class="flex gap-4 items-center ms-3 font-medium" data-dropdown-toggle="dropdown-user">
                             <span>{{ Auth::user()->name }}</span>
@@ -86,47 +91,21 @@
                               </li>
                             </ul>
                         </div>
-                    @else
-                        <div class="flex items-center gap-2 mt-5">
-                            <a href="{{ route('login') }}" class="w-24 text-secondary bg-white hover:bg-secondary hover:text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Login</a>
-                            <a href="{{ route('register') }}" class="w-24 text-white bg-primary hover:bg-blue-500 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Register</a>
-                        </div>
-                        @endauth
-                    @endif
+                        @else
+                            <div class="flex items-center gap-2 mt-5">
+                                <a href="{{ route('login') }}" class="w-24 text-secondary bg-white hover:bg-secondary hover:text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Login</a>
+                                <a href="{{ route('register') }}" class="w-24 text-white bg-primary hover:bg-blue-500 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Register</a>
+                            </div>
+                            @endauth
+                        @endif
+                    </div>
+                </nav>
+                <div class="py-10 pr-10">
+                    {{ $slot }}
                 </div>
-            </div>
-
-            <div class="py-6 px-20">
-                {{ $slot }}
             </div>
         </div>
-
-        <footer class="bg-white border-t-2">
-            <div class="w-full max-w-screen-xl mx-auto p-2">
-                <div class="flex items-center justify-between">
-                    <a href="{{ route('beranda') }}" class="flex items-center mb-4 space-x-3">
-                        <img src="{{ asset('img/logo.png') }}" alt="" width="115" height="115">
-                    </a>
-                    <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500">
-                        <li>
-                            <a href="#" class="hover:underline me-4 md:me-6">About</a>
-                        </li>
-                        <li>
-                            <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
-                        </li>
-                        <li>
-                            <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
-                        </li>
-                        <li>
-                            <a href="#" class="hover:underline">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-                <hr class="my-2 border-gray-200 mx-auto" />
-                <span class="block text-sm text-gray-500 text-center">© 2024 E-LITERASI™. All Rights Reserved.</span>
-            </div>
-        </footer>
-        <div id="toast-success" class="fixed hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-xl top-5 right-5" role="alert">
+        <div id="toast-success" class="absolute z-10 hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-xl top-5 right-5" role="alert">
             <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>

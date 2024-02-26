@@ -27,7 +27,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($anggota as $item)
-                                    <tr class="odd:bg-white even:bg-gray-50 border-b">
+                                    <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {{ $nomor++ }}
                                         </th>

@@ -12,10 +12,9 @@ class BukuController extends Controller
     public function show($slug)
     {
         $buku = Buku::where('slug', $slug)->firstOrFail();
-        $ulasan = Ulasan::where('buku_id', $buku->id)->latest()->paginate(5);
-        $ulasanTerbaru = Ulasan::where('buku_id', $buku->id)->latest()->first();
+        $ulasan = Ulasan::where('buku_id', $buku->id)->latest()->get();
         $avg = Ulasan::where('buku_id', $buku->id)->avg('rating');
-        return view('user.buku', compact('buku','ulasan','ulasanTerbaru','avg'));
+        return view('user.buku', compact('buku', 'ulasan', 'avg'));
     }
 
     public function showRandom()

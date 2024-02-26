@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class PeminjamanController extends Controller
             'buku_id' => $request->buku_id,
             'users_id' => Auth::user()->id,
             'tgl_peminjaman' => now(),
+            'batas_waktu' => now()->addWeek(),
             'status_peminjaman' => 'N'
         ]);
 
@@ -38,11 +40,24 @@ class PeminjamanController extends Controller
         return redirect()->back()->with(['success' => 'Buku berhasil dipinjam']);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'tgl_pengembalian' => 'required',
+        ]);
+
         $peminjaman = Peminjaman::find($id);
-        $peminjaman->tgl_pengembalian = now();
-        $peminjaman->update(['status_peminjaman' => 'Y']);
+        $batas_waktu = Carbon::parse($peminjaman->batas_waktu);
+        $tgl_pengembalian = Carbon::parse($request->tgl_pengembalian);
+
+        $hari_keterlambatan = $batas_waktu->diffInDays($tgl_pengembalian, false);
+        $denda = max(0, $hari_keterlambatan) * 5000;
+
+        $peminjaman->update([
+            'tgl_pengembalian' => $request->tgl_pengembalian,
+            'status_peminjaman' => 'Y',
+            'denda' => $denda,
+        ]);
 
         $buku = Buku::find($peminjaman->buku_id);
         $buku->stok = $buku->stok + 1;

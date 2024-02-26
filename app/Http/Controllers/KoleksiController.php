@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Koleksi;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,8 @@ class KoleksiController extends Controller
         $buku = Buku::whereHas('peminjaman', function($query) {
             $query->where('users_id', Auth::user()->id);
         })->get();
-        return view('user.koleksi', compact('koleksi', 'buku'));
+        $peminjaman = Peminjaman::where('users_id', Auth::user()->id)->get();
+        return view('user.koleksi', compact('koleksi', 'buku', 'peminjaman'));
     }
 
     public function store(Request $request)

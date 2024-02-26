@@ -114,7 +114,7 @@
                         @foreach ($buku as $item)
                         <tr>
                             <td>{{ $item->judul }}</td>
-                            <td>{{ $item->deskripsi }}</td>
+                            <td>{{ Str::limit($item->deskripsi, 50) }}</td>
                             <td>{{ $item->penulis }}</td>
                             <td>{{ $item->penerbit }}</td>
                             <td>{{ $item->tahun_terbit }}</td>

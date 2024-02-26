@@ -29,7 +29,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BerandaController::class, 'index'])->name('beranda');
 Route::get('/buku/{slug}', [BukuController::class, 'show'])->name('buku.show');
-Route::get('/buku', [BukuController::class, 'showRandom'])->name('buku.random');
 
 Route::middleware('auth')->group(function () {
     Route::middleware(['role:admin,petugas'])->group(function () {
@@ -81,6 +80,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/dashboard/petugas/{id}', [PetugasController::class, 'update'])->name('petugas.update');
         Route::delete('/dashboard/petugas/{id}', [PetugasController::class, 'destroy'])->name('petugas.destroy');
     Route::middleware(['role:user'])->group(function () {
+        Route::get('/buku', [BukuController::class, 'showRandom'])->name('buku.random');
         // Peminjaman
         Route::post('/buku/{id}/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
         // Ulasan

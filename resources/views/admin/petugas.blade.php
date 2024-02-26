@@ -2,7 +2,7 @@
     <h1 class="text-2xl font-semibold">Data Petugas</h1>
     <div class="pr-6 py-12">
         <div class="max-w-7xl mx-auto">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="text-gray-900">
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <div class="flex justify-between">
@@ -38,7 +38,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($petugas as $item)
-                                    <tr class="odd:bg-white even:bg-gray-50 border-b">
+                                    <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {{ $nomor++ }}
                                         </th>
