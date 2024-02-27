@@ -17,6 +17,7 @@ class Buku extends Model
         'judul',
         'slug',
         'foto',
+        'kategori_id',
         'deskripsi',
         'penulis',
         'penerbit',
@@ -33,9 +34,9 @@ class Buku extends Model
         ];
     }
 
-    public function kategoriBukuRelasi()
+    public function kategori()
     {
-        return $this->hasMany(KategoriBukuRelasi::class, 'buku_id');
+        return $this->belongsTo(Kategori::class, 'kategori_id', 'id');
     }
 
     public function peminjaman()

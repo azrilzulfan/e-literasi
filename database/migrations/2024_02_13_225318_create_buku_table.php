@@ -16,12 +16,15 @@ return new class extends Migration
             $table->string('judul');
             $table->string('slug');
             $table->string('foto')->nullable();
+            $table->unsignedBigInteger('kategori_id')->nullable();
             $table->text('deskripsi');
             $table->string('penulis');
             $table->string('penerbit');
             $table->integer('tahun_terbit');
             $table->integer('stok');
             $table->timestamps();
+
+            $table->foreign('kategori_id')->references('id')->on('kategori')->onDelete('set null')->onUpdate('cascade');
         });
     }
 

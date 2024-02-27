@@ -11,10 +11,6 @@
                 <dd class="text-primary">Kategori</dd>
             </div>
             <div class="flex flex-col items-center bg-gray-100 p-5 shadow rounded-lg">
-                <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{ $kategoriBukuRelasi }}</dt>
-                <dd class="text-primary">Kategori Buku</dd>
-            </div>
-            <div class="flex flex-col items-center bg-gray-100 p-5 shadow rounded-lg">
                 <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{ $peminjaman }}</dt>
                 <dd class="text-primary">Peminjaman</dd>
             </div>

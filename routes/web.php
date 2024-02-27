@@ -3,17 +3,12 @@
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataBukuController;
-use App\Http\Controllers\KategoriBukuRelasiController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PetugasController;
-use App\Models\Buku;
-use App\Models\Kategori;
-use App\Models\KategoriBukuRelasi;
-use App\Models\Peminjaman;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,23 +27,7 @@ Route::get('/buku/{slug}', [BukuController::class, 'show'])->name('buku.show');
 
 Route::middleware('auth')->group(function () {
     Route::middleware(['role:admin,petugas'])->group(function () {
-        Route::get('/dashboard', function () {
-            $buku = Buku::count();
-            $kategori = Kategori::count();
-            $kategoriBukuRelasi = KategoriBukuRelasi::count();
-            $peminjaman = Peminjaman::count();
-            $petugas = User::where('role', 'petugas')->count();
-            $anggota = User::where('role', 'user')->count();
-
-            return view('admin.dashboard')->with([
-                'buku' => $buku,
-                'kategori' => $kategori,
-                'kategoriBukuRelasi' => $kategoriBukuRelasi,
-                'peminjaman' => $peminjaman,
-                'petugas' => $petugas,
-                'anggota' => $anggota
-            ]);
-        })->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         // Data Buku
         Route::get('/dashboard/buku', [DataBukuController::class, 'index'])->name('dataBuku.index');
         Route::post('/dashboard/buku', [DataBukuController::class, 'store'])->name('dataBuku.store');
@@ -60,13 +39,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/dashboard/kategori', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('/dashboard/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/dashboard/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-        // Kategori Buku Relasi
-        Route::get('/dashboard/kategoriBukuRelasi', [KategoriBukuRelasiController::class, 'index'])->name('kategoriBukuRelasi.index');
-        Route::post('/dashboard/kategoriBukuRelasi', [KategoriBukuRelasiController::class, 'store'])->name('kategoriBukuRelasi.store');
-        Route::put('/dashboard/kategoriBukuRelasi/{id}', [KategoriBukuRelasiController::class, 'update'])->name('kategoriBukuRelasi.update');
-        Route::delete('/dashboard/kategoriBukuRelasi/{id}', [KategoriBukuRelasiController::class, 'destroy'])->name('kategoriBukuRelasi.destroy');
         // Peminjaman
         Route::get('/dashboard/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
+        Route::put('/dashboard/peminjaman/batasWaktu/{id}', [PeminjamanController::class, 'updateBatasWaktu'])->name('peminjaman.batasWaktu');
         Route::put('/dashboard/peminjaman/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
         Route::delete('/dashboard/peminjaman/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
         Route::get('/dashboard/peminjaman/pdf', [PeminjamanController::class, 'peminjamanPDF'])->name('peminjaman.pdf');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -10,9 +11,10 @@ class DataBukuController extends Controller
 {
     public function index()
     {
-        $buku = Buku::paginate(5);
+        $buku = Buku::orderBy('created_at', 'desc')->paginate(5);
+        $kategori = Kategori::all();
         $nomor = ($buku->currentPage() - 1) * $buku->perPage() + 1;
-        return view('admin.buku', compact('buku','nomor'));
+        return view('admin.buku', compact('buku', 'kategori', 'nomor'));
     }
 
     public function store(Request $request)
@@ -20,6 +22,7 @@ class DataBukuController extends Controller
         $request->validate([
             'judul' => 'required',
             'foto' => 'image|nullable|mimes:png,jpg,gif|max:2048',
+            'kategori_id' => 'required',
             'deskripsi' => 'required',
             'penulis' => 'required',
             'penerbit' => 'required',
@@ -41,6 +44,7 @@ class DataBukuController extends Controller
         Buku::create([
             'judul' => $request->judul,
             'foto' => $path.$filename,
+            'kategori_id' => $request->kategori_id,
             'deskripsi' => $request->deskripsi,
             'penulis' => $request->penulis,
             'penerbit' => $request->penerbit,
@@ -56,6 +60,7 @@ class DataBukuController extends Controller
         $request->validate([
             'judul' => 'required',
             'foto' => 'image|nullable|mimes:png,jpg,gif|max:2048',
+            'kategori_id' => 'required',
             'deskripsi' => 'required',
             'penulis' => 'required',
             'penerbit' => 'required',
@@ -79,6 +84,7 @@ class DataBukuController extends Controller
             $buku->update([
                 'judul' => $request->judul,
                 'foto' => $path.$filename,
+                'kategori_id' => $request->kategori_id,
                 'deskripsi' => $request->deskripsi,
                 'penulis' => $request->penulis,
                 'penerbit' => $request->penerbit,
@@ -88,6 +94,7 @@ class DataBukuController extends Controller
         } else {
             $buku->update([
                 'judul' => $request->judul,
+                'kategori_id' => $request->kategori_id,
                 'deskripsi' => $request->deskripsi,
                 'penulis' => $request->penulis,
                 'penerbit' => $request->penerbit,

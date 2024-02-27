@@ -30,7 +30,6 @@ class PeminjamanController extends Controller
             'buku_id' => $request->buku_id,
             'users_id' => Auth::user()->id,
             'tgl_peminjaman' => now(),
-            'batas_waktu' => now()->addWeek(),
             'status_peminjaman' => 'N'
         ]);
 
@@ -38,6 +37,18 @@ class PeminjamanController extends Controller
         $buku->save();
 
         return redirect()->back()->with(['success' => 'Buku berhasil dipinjam']);
+    }
+
+    public function updateBatasWaktu(Request $request, $id)
+    {
+        $request->validate([
+            'batas_waktu' => 'required'
+        ]);
+
+        $peminjaman = Peminjaman::findOrFail($id);
+        $peminjaman->update($request->all());
+        
+        return redirect()->back();
     }
 
     public function update(Request $request, $id)

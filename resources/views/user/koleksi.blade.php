@@ -25,9 +25,9 @@
                         <img class="rounded-t-lg" src="{{ $item->buku->foto }}" alt="" width="250"/>
                     </a>
                     <div class="p-5">
-                        @foreach ($item->buku->kategoriBukuRelasi as $kategori)
-                        <a href="" class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $kategori->kategori->nama_kategori }}</a>
-                        @endforeach
+                        @if ($item->buku->kategori_id != null)
+                        <a href="" class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $item->buku->kategori->nama_kategori }}</a>
+                        @endif
                         <p class="mb-3 mt-3 text-sm font-semibold text-gray-500">{{ $item->buku->judul }}</p>
                         <div class="flex justify-between items-center">
                             <h5 class="mb-2 text-sm font-semibold tracking-tight text-gray-900">{{ $item->buku->penulis }}</h5>
@@ -102,9 +102,9 @@
                         <p>Tanggal Pengembalian</p>
                     </div>
                     <div>
-                        <p>{{ $item->tgl_peminjaman }}</p>
-                        <p>{{ $item->batas_waktu }}</p>
-                        <p>{{ $item->tgl_pengembalian }}</p>
+                        <p>{{ \Carbon\Carbon::parse($item->tgl_peminjaman)->format('d-m-Y') }}</p>
+                        <p>{{ \Carbon\Carbon::parse($item->batas_waktu)->format('d-m-Y') }}</p>
+                        <p>{{ \Carbon\Carbon::parse($item->tgl_pengembalian)->format('d-m-Y') }}</p>
                     </div>
                 </div>
                 <hr class="mt-2 mb-4">

@@ -12,9 +12,9 @@
                     <p class="text-gray-400">{{ $bukuTerbaru->penulis }}</p>
                     <div class="flex gap-10 mt-5 items-center">
                         <div class="flex flex-col items-center">
-                            @foreach ($bukuTerbaru->kategoriBukuRelasi as $kategoriBuku)
-                            <h3 class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $kategoriBuku->kategori->nama_kategori }}</h3>
-                            @endforeach
+                            @if ($bukuTerbaru->kategori_id != null)
+                            <h3 class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $bukuTerbaru->kategori->nama_kategori }}</h3>
+                            @endif
                             <p class="text-gray-400">kategori</p>
                         </div>
                         <div class="flex flex-col items-center">
@@ -76,21 +76,24 @@
     <h1 class="text-xl text-secondary font-semibold">Daftar Buku</h1>
     <div class="grid grid-cols-6 gap-2 py-5">
         @foreach ($buku as $item)
-        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+        <div class="max-w-sm max-h-[500px] bg-white border border-gray-200 rounded-lg shadow">
             <a href="{{ route('buku.show', $item->slug) }}">
                 <img class="rounded-t-lg" src="{{ asset($item->foto) }}" alt="{{ $item->foto }}" width="250"/>
             </a>
             <div class="p-5">
+                @if ($item->kategori_id != null)
                 <div>
-                    @foreach ($item->kategoriBukuRelasi as $kategoriBuku)
-                        <span class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $kategoriBuku->kategori->nama_kategori }}</span>
-                    @endforeach
+                    <span class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $item->kategori->nama_kategori }}</span>
                 </div>
-                <h1 class="mb-3 mt-3 text-sm font-semibold text-secondary">{{ $item->judul }}</h1>
+                @endif
+                <h1 class="mb-3 mt-3 text-sm font-semibold text-secondary">{{ Str::limit($item->judul, 50) }}</h1>
                 <p class="mb-3 mt-3 text-sm font-semibold text-gray-400">{{ $item->penulis }}</p>
             </div>
         </div>
         @endforeach
+    </div>
+    <div class="mt-4">
+        {{ $buku->links() }}
     </div>
 </x-app-layout>
 
@@ -104,9 +107,9 @@
         </div>
         <div class="flex gap-10 items-center bg-gray-700 p-4 rounded-xl justify-between">
             <div class="flex flex-col items-center">
-                @foreach ($randomBuku->kategoriBukuRelasi as $kategoriBuku)
-                <h3 class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $kategoriBuku->kategori->nama_kategori }}</h3>
-                @endforeach
+                @if ($randomBuku->kategori_id != null)
+                <h3 class="px-3 py-2 text-xs font-medium text-center text-white bg-primary rounded-lg">{{ $randomBuku->kategori->nama_kategori }}</h3>
+                @endif
                 <p class="text-gray-400">kategori</p>
             </div>
             <div class="text-xl">|</div>
@@ -117,7 +120,7 @@
             <div class="text-xl">|</div>
             <div class="flex flex-col items-center">
                 <h3 class="font-semibold text-lg">
-                    @if(isset($averages[$randomBuku->id]))
+                    @if (isset($averages[$randomBuku->id]))
                         {{ number_format($averages[$randomBuku->id], 1) }}
                         <input type="radio" disabled class="mask mask-star-2 bg-yellow-300" />
                     @else
@@ -129,7 +132,7 @@
         </div>
         <div class="my-5">
             <h1 class="text-lg font-semibold mb-5">Deskripsi</h1>
-            <p class="text-gray-400 max-h-[240px] overflow-y-auto scrollable">{{ $randomBuku->deskripsi }}</p>
+            <p class="text-gray-400 max-h-[200px] overflow-y-auto scrollable">{{ $randomBuku->deskripsi }}</p>
         </div>
         <div class="absolute bottom-0 left-0 right-0 p-10 text-center">
             <button onclick="window.location.href='{{ route('buku.show', $randomBuku->slug) }}'" class="w-full text-white bg-primary hover:bg-blue-500 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center">Lihat Detail Buku</button>

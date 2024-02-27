@@ -122,9 +122,9 @@
                         <tr>
                             <td>{{ $item->users->name }}</td>
                             <td>{{ $item->buku->judul }}</td>
-                            <td>{{ $item->tgl_peminjaman }}</td>
-                            <td>{{ $item->batas_waktu }}</td>
-                            <td>{{ $item->tgl_pengembalian }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->tgl_peminjaman)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->batas_waktu)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->tgl_pengembalian)->format('d-m-Y') }}</td>
                             <td>Rp. {{ $item->denda }}</td>
                             <td>
                                 @if ($item->status_peminjaman == 'N')

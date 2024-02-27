@@ -16,10 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('users_id');
             $table->unsignedBigInteger('buku_id');
             $table->date('tgl_peminjaman');
-            $table->date('batas_waktu');
+            $table->date('batas_waktu')->nullable();
             $table->date('tgl_pengembalian')->nullable();
             $table->string('status_peminjaman')->default('N');
-            $table->integer('denda')->nullabe();
+            $table->integer('denda')->nullable();
             $table->timestamps();
 
             $table->foreign('users_id')->references('id')->on('users');

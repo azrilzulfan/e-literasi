@@ -35,6 +35,9 @@
                                         Deskripsi
                                     </th>
                                     <th scope="col" class="px-6 py-3">
+                                        Kategori
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         Penulis
                                     </th>
                                     <th scope="col" class="px-6 py-3">
@@ -66,6 +69,15 @@
                                         <td class="px-6 py-4">
                                             {{ Str::limit($item->deskripsi, 50) }}
                                         </td>
+                                        @if ($item->kategori_id != null)
+                                        <td class="px-6 py-4">
+                                            {{ $item->kategori->nama_kategori }}
+                                        </td>
+                                        @else
+                                        <td class="px-6 py-4">
+
+                                        </td>
+                                        @endif
                                         <td class="px-6 py-4">
                                             {{ $item->penulis }}
                                         </td>
@@ -152,6 +164,19 @@
                                                                 <textarea id="deskripsi" name="deskripsi" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">{{ $item->deskripsi }}</textarea>
                                                             </div>
                                                             <div class="col-span-2">
+                                                                <label for="kategori_id" class="block mb-2 text-sm font-medium text-gray-900">Nama Kategori</label>
+                                                                <select name="kategori_id" id="kategori_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                                                    <option selected="">Pilih Kategori</option>
+                                                                    @foreach ($kategori as $k)
+                                                                        @if ($k->id == $item->kategori_id)
+                                                                            <option value="{{ $k->id }}" selected>{{ $k->nama_kategori }}</option>
+                                                                        @else
+                                                                            <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-span-2">
                                                                 <label for="penulis" class="block mb-2 text-sm font-medium text-gray-900">Penulis</label>
                                                                 <input type="text" name="penulis" id="penulis" value="{{ $item->penulis }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="">
                                                             </div>
@@ -221,6 +246,15 @@
                     <div class="col-span-2">
                         <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
                         <textarea id="deskripsi" name="deskripsi" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="kategori_id" class="block mb-2 text-sm font-medium text-gray-900">Kategori</label>
+                        <select name="kategori_id" id="kategori_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                            <option selected="">Pilih Kategori</option>
+                            @foreach ($kategori as $k)
+                                    <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-span-2">
                         <label for="penulis" class="block mb-2 text-sm font-medium text-gray-900">Penulis</label>

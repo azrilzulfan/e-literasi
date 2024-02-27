@@ -8,18 +8,18 @@
                     </svg>
                 </button>
             </div>
+            @if ($buku->kategori_id != null)
             <div class="mb-10 text-sm">
-                @foreach ($buku->kategoriBukuRelasi as $kategoriBuku)
-                    <span class="text-gray-400">{{ $kategoriBuku->kategori->nama_kategori }}</span> / {{ $buku->judul }}
-                @endforeach
+                <span class="text-gray-400">{{ $buku->kategori->nama_kategori }}</span> / {{ $buku->judul }}
             </div>
+            @endif
             <div class="mb-5 text-3xl font-bold">
                 {{ $buku->judul }}
             </div>
             <div class="font-semibold mb-2">
                 {{ $buku->penulis }}
             </div>
-            <div class="my-5">
+            <div class="my-5 max-h-[200px] scrollable overflow-y-auto">
                 {{ $buku->deskripsi }}
             </div>
             <div class="text-sm flex gap-5">

@@ -104,6 +104,7 @@
                         <tr>
                             <th>Judul</th>
                             <th>Deskripsi</th>
+                            <th>Kategori</th>
                             <th>Penulis</th>
                             <th>Penerbit</th>
                             <th>Tahun Terbit</th>
@@ -115,6 +116,7 @@
                         <tr>
                             <td>{{ $item->judul }}</td>
                             <td>{{ Str::limit($item->deskripsi, 50) }}</td>
+                            <td>{{ $item->kategori->nama_kategori }}</td>
                             <td>{{ $item->penulis }}</td>
                             <td>{{ $item->penerbit }}</td>
                             <td>{{ $item->tahun_terbit }}</td>

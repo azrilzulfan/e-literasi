@@ -58,13 +58,27 @@
                                             {{ $item->buku->judul }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $item->tgl_peminjaman }}
+                                            {{ \Carbon\Carbon::parse($item->tgl_peminjaman)->format('d-m-Y') }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $item->batas_waktu }}
+                                            @if ($item->batas_waktu)
+                                            {{ \Carbon\Carbon::parse($item->batas_waktu)->format('d-m-Y') }}
+                                            @else
+                                                <form action="{{ route('peminjaman.batasWaktu' , $item->id) }}" method="POST" class="flex gap-2">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="date" name="batas_waktu" class="rounded-lg">
+                                                    <button type="sbumit" class="text-primary hover:text-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                        </svg>
+                                                </form>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $item->tgl_pengembalian }}
+                                            @if ($item->tgl_pengembalian)
+                                            {{ \Carbon\Carbon::parse($item->tgl_pengembalian)->format('d-m-Y') }}
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ $item->denda }}

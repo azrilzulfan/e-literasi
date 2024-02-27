@@ -12,7 +12,7 @@ class BerandaController extends Controller
     public function index(Request $request)
     {
         $query = $request->input('query');
-        $buku = Buku::all();
+        $buku = Buku::paginate(18);
         $bukuTerbaru = Buku::latest()->take(2)->get();
         $randomBuku = Buku::inRandomOrder()->first();
         $kategori = Kategori::all();
@@ -29,10 +29,8 @@ class BerandaController extends Controller
                 ->orWhere('penulis', 'LIKE', "%{$query}%")
                 ->orWhere('penerbit', 'LIKE', "%{$query}%")
                 ->orWhere('tahun_terbit', 'LIKE', "%{$query}%")
-                ->orWhereHas('kategoriBukuRelasi', function($q) use ($query) {
-                    $q->whereHas('kategori', function($subQuery) use ($query) {
-                        $subQuery->where('nama_kategori', 'LIKE', "%{$query}%");
-                    });
+                ->orWhereHas('kategori', function($kategoriQuery) use ($query) {
+                    $kategoriQuery->where('nama_kategori', 'LIKE', "%{$query}%");
                 })
                 ->get();
         }
