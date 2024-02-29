@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-10">
-        <a href="{{ route('beranda') }}">
+        <a href="{{ route('landing') }}">
             <img src="{{ asset('img/logo.png') }}" alt="" width="150" height="150" class="mx-auto mb-10">
         </a>
         <h1 class="text-2xl font-semibold text-center">REGISTER</h1>

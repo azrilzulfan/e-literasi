@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Koleksi;
 use Carbon\Carbon;
 use App\Models\Buku;
 use App\Models\Peminjaman;
@@ -36,7 +37,12 @@ class PeminjamanController extends Controller
         $buku->stok = $buku->stok - 1;
         $buku->save();
 
-        return redirect()->back()->with(['success' => 'Buku berhasil dipinjam']);
+        Koleksi::create([
+            'users_id' => Auth::user()->id,
+            'buku_id' => $buku->id
+        ]);
+
+        return redirect()->route('koleksi.index')->with(['success' => 'Buku berhasil dipinjam']);
     }
 
     public function updateBatasWaktu(Request $request, $id)
@@ -47,7 +53,7 @@ class PeminjamanController extends Controller
 
         $peminjaman = Peminjaman::findOrFail($id);
         $peminjaman->update($request->all());
-        
+
         return redirect()->back();
     }
 

@@ -12,7 +12,7 @@ class BerandaController extends Controller
     public function index(Request $request)
     {
         $query = $request->input('query');
-        $buku = Buku::paginate(18);
+        $buku = Buku::all();
         $bukuTerbaru = Buku::latest()->take(2)->get();
         $randomBuku = Buku::inRandomOrder()->first();
         $kategori = Kategori::all();

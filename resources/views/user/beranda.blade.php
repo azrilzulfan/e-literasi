@@ -92,9 +92,6 @@
         </div>
         @endforeach
     </div>
-    <div class="mt-4">
-        {{ $buku->links() }}
-    </div>
 </x-app-layout>
 
 <div class="w-[25%] p-10 min-h-screen bg-secondary text-white fixed top-0 right-0">

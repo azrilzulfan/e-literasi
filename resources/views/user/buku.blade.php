@@ -38,18 +38,24 @@
             </div>
             <div>
                 @if ($buku->stok != '0')
-                    <form action="{{ route('peminjaman.store', $buku->id) }}" method="POST">
-                        @csrf
-                        <div>
-                            <input type="hidden" name="buku_id" value="{{ $buku->id }}">
-                        </div>
+                    @if (Auth::user()->peminjaman()->whereNull('tgl_pengembalian')->count() < 3)
+                        <form action="{{ route('peminjaman.store', $buku->id) }}" method="POST">
+                            @csrf
+                            <div>
+                                <input type="hidden" name="buku_id" value="{{ $buku->id }}">
+                            </div>
+                            <div class="mt-10">
+                                <button type="submit" class="w-36 text-white bg-primary hover:bg-blue-500 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Pinjam Buku</button>
+                            </div>
+                        </form>
+                    @else
                         <div class="mt-10">
-                            <button type="submit" class="w-36 text-white bg-primary hover:bg-blue-500 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Pinjam Buku</button>
+                            <button type="button" class="w-56 text-white bg-red-400 hover:bg-red-500 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Anda telah mencapai batas maksimal peminjaman.</button>
                         </div>
-                    </form>
+                    @endif
                 @else
                     <div class="mt-10">
-                        <button type="button" onclick="history.back()" class="w-40 text-white bg-red-400 hover:bg-red-500 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Buku Tidak Tersedia</button>
+                        <button type="button" onclick="history.back()" class="w-44 text-white bg-red-400 hover:bg-red-500 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5">Buku Tidak Tersedia</button>
                     </div>
                 @endif
             </div>
@@ -139,7 +145,7 @@
             @endforeach
         </div>
     @else
-        <div class="flex items-center p-4 mb-4 text-sm text-red-500 rounded-lg bg-red-100 mt-5">
+        <div class="flex items-center p-4 mb-4 text-sm text-white rounded-lg bg-red-400 hover:bg-red-500 mt-5">
             <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
             </svg>

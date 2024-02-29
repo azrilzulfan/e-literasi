@@ -20,25 +20,22 @@ class KoleksiController extends Controller
         return view('user.koleksi', compact('koleksi', 'buku', 'peminjaman'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'buku_id' => 'required'
-        ]);
-
-        Koleksi::create([
-            'users_id' => Auth::user()->id,
-            'buku_id' => $request->buku_id
-        ]);
-
-        return redirect()->route('koleksi.index')->with(['success' => 'Koleksi berhasil ditambahkan']);
-    }
-
     public function destroy($id)
     {
         $koleksi = Koleksi::findOrFail($id);
+        $peminjaman = Peminjaman::where('buku_id', $koleksi->buku_id)->get();
+
+        foreach ($peminjaman as $peminjaman) {
+            $peminjaman->delete();
+
+            $buku = Buku::find($peminjaman->buku_id);
+            $buku->stok = $buku->stok + 1;
+            $buku->save();
+        }
+
         $koleksi->delete();
 
-        return redirect()->route('koleksi.index')->with(['success' => 'Koleksi berhasil dihapus']);
+        return redirect()->route('koleksi.index')->with(['success' => 'Koleksi dan Peminjaman Buku berhasil dihapus']);
     }
+
 }
