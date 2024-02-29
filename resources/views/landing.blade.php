@@ -117,11 +117,6 @@
                     </a>
                 </div>
             </div>
-            <div>
-                <a href="{{ route('beranda') }}" class="mr-5">
-                    <img src="{{ asset('img/logo.png') }}" alt="" width="100" height="100">
-                </a>
-            </div>
         </div>
     </body>
 </html>
